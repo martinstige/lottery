@@ -15,9 +15,9 @@ if (args.Length == 0)
 // Display header
 Console.Clear();
 Console.ForegroundColor = ConsoleColor.Cyan;
-Console.WriteLine("╔════════════════════════════════════════════════╗");
-Console.WriteLine("║        🎰 LOTTERY DRAWING APP 🎰              ║");
-Console.WriteLine("╔════════════════════════════════════════════════╗");
+Console.WriteLine("╔══════════════════════════════════════════════════╗");
+Console.WriteLine("║          🎰 LOTTERY DRAWING APP 🎰               ║");
+Console.WriteLine("╚══════════════════════════════════════════════════╝");
 Console.ResetColor();
 Console.WriteLine();
 
@@ -50,20 +50,20 @@ int[] delays = new int[totalSpins];
 // Create acceleration pattern - start slow, speed up, then slow down at the end
 for (int i = 0; i < totalSpins; i++)
 {
-    if (i < 10)
+    if (i < 20)
     {
         // Start slow
-        delays[i] = 200 - (i * 10);
+        delays[i] = 400 - (i * 20);
     }
-    else if (i < 30)
-    {
-        // Fast middle section
-        delays[i] = 50;
-    }
+    // else if (i < 30)
+    // {
+    //     // Fast middle section
+    //     delays[i] = 50;
+    // }
     else
     {
         // Slow down at the end for dramatic effect
-        delays[i] = 50 + ((i - 29) * 30);
+        delays[i] = 100 + ((i - 19) * 30);
     }
 }
 
@@ -109,17 +109,16 @@ Console.ResetColor();
 Console.WriteLine();
 
 Console.ForegroundColor = ConsoleColor.Yellow;
-Console.WriteLine("╔════════════════════════════════════════════════╗");
-Console.ForegroundColor = ConsoleColor.Cyan;
+Console.WriteLine("╔══════════════════════════════════════════════════╗");
+Console.ForegroundColor = ConsoleColor.Yellow;
 Console.Write("║  🏆 ");
 Console.ForegroundColor = ConsoleColor.White;
 Console.BackgroundColor = ConsoleColor.DarkGreen;
 Console.Write($" {args[winnerIndex].ToUpper().PadRight(38)} ");
 Console.ResetColor();
-Console.ForegroundColor = ConsoleColor.Cyan;
-Console.WriteLine(" 🏆  ║");
 Console.ForegroundColor = ConsoleColor.Yellow;
-Console.WriteLine("╚════════════════════════════════════════════════╝");
+Console.WriteLine(" 🏆  ║");
+Console.WriteLine("╚══════════════════════════════════════════════════╝");
 Console.ResetColor();
 Console.WriteLine();
 
