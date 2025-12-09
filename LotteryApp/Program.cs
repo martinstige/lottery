@@ -48,24 +48,17 @@ Console.WriteLine();
 Random random = new Random();
 int winnerIndex = random.Next(args.Length);
 
-int totalSpins = 40+winnerIndex;
-int[] delays = new int[totalSpins];
+int totalSpins = 40 - (40 % args.Length) + winnerIndex + 1;
 
-double F(double x)
+int F(double x)
 {
     // Upside-down bell curve: vertex at totalSpins/2, F(0) = F(totalSpins) = 500
-    double h = totalSpins / 2.0;  // x-coordinate of vertex (turning point)
-    double k = 50.0;               // y-coordinate of vertex (minimum delay for fastest spin)
-    double a = (500.0 - k) / (h * h);  // coefficient to ensure F(0) = F(totalSpins) = 500
-    
-    var ret = a * (x - h) * (x - h) + k;
-    return ret;
-}
+    double h = totalSpins / 2.0; // x-coordinate of vertex (turning point)
+    double k = 50.0; // y-coordinate of vertex (minimum delay for fastest spin)
+    double a = (500.0 - k) / (h * h); // coefficient to ensure F(0) = F(totalSpins) = 500
 
-// Create acceleration pattern - start slow, speed up, then slow down at the end
-for (int i = 0; i < totalSpins; i++)
-{
-    delays[i] = (int)F(i);
+    var ret = a * (x - h) * (x - h) + k;
+    return (int)ret;
 }
 
 // Animate the spinning
@@ -76,28 +69,36 @@ for (int spin = 0; spin < totalSpins; spin++)
     Console.SetCursorPosition(0, Console.CursorTop);
     Console.Write(new string(' ', Console.WindowWidth - 1));
     Console.SetCursorPosition(0, Console.CursorTop);
-    
+
     // Display current name with fancy formatting
     Console.ForegroundColor = ConsoleColor.Yellow;
     Console.Write(">>> ");
     Console.ForegroundColor = ConsoleColor.White;
-    Console.Write(args[currentIndex].PadRight(30));
+    for (int i = 0; i < args.Length; i++)
+    {
+        if (currentIndex == i)
+        {
+            Console.ForegroundColor = ConsoleColor.Cyan;
+        }
+        Console.Write(args[i].PadRight(15));
+        Console.ForegroundColor = ConsoleColor.White;
+    }
+
     Console.ForegroundColor = ConsoleColor.Yellow;
     Console.Write(" <<<");
     Console.ResetColor();
-    
-    Thread.Sleep(delays[spin]);
-    
+
+    Thread.Sleep(F(spin));
+
     currentIndex = (currentIndex + 1) % args.Length;
 }
 
-// Final reveal - ensure we land on the winner
-Console.SetCursorPosition(0, Console.CursorTop);
-Console.Write(new string(' ', Console.WindowWidth - 1));
-Console.SetCursorPosition(0, Console.CursorTop);
 
 // Dramatic pause
 Thread.Sleep(500);
+Console.SetCursorPosition(0, Console.CursorTop);
+Console.Write(new string(' ', Console.WindowWidth - 1));
+Console.SetCursorPosition(0, Console.CursorTop);
 
 // Display winner with celebration
 Console.ForegroundColor = ConsoleColor.Green;
