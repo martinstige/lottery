@@ -44,32 +44,29 @@ Console.WriteLine("🎲 Drawing winner...");
 Console.ResetColor();
 Console.WriteLine();
 
-int totalSpins = 40;
+// Random selection
+Random random = new Random();
+int winnerIndex = random.Next(args.Length);
+
+int totalSpins = 40+winnerIndex;
 int[] delays = new int[totalSpins];
+
+double F(double x)
+{
+    // Upside-down bell curve: vertex at totalSpins/2, F(0) = F(totalSpins) = 500
+    double h = totalSpins / 2.0;  // x-coordinate of vertex (turning point)
+    double k = 50.0;               // y-coordinate of vertex (minimum delay for fastest spin)
+    double a = (500.0 - k) / (h * h);  // coefficient to ensure F(0) = F(totalSpins) = 500
+    
+    var ret = a * (x - h) * (x - h) + k;
+    return ret;
+}
 
 // Create acceleration pattern - start slow, speed up, then slow down at the end
 for (int i = 0; i < totalSpins; i++)
 {
-    if (i < 20)
-    {
-        // Start slow
-        delays[i] = 400 - (i * 20);
-    }
-    // else if (i < 30)
-    // {
-    //     // Fast middle section
-    //     delays[i] = 50;
-    // }
-    else
-    {
-        // Slow down at the end for dramatic effect
-        delays[i] = 100 + ((i - 19) * 30);
-    }
+    delays[i] = (int)F(i);
 }
-
-// Random selection
-Random random = new Random();
-int winnerIndex = random.Next(args.Length);
 
 // Animate the spinning
 int currentIndex = 0;
